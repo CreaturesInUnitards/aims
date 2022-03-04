@@ -1,14 +1,23 @@
-export const createState = ({
-	a = Object.assign,	// accumulator
-	i = {}, 			// initial_state
-	m = () => ({}), 	// mutators
-} = {}) => {
-	let value = a({}, i)
-	const fn = Object.assign(() => {}, {
-		patch: x => {
-			value = a({ ...value }, x)
+export const aims = ({
+	a = Object.assign,
+	i = {},
+	m = [_state => {}],
+	accumulator = a,
+	initial_state = i,
+	mutators = m
+ } = {}) => {
+	let value = accumulator({}, initial_state)
+
+	const state = {
+		patch: object => {
+			value = accumulator({ ...value }, object)
 		},
 		get: () => value,
-	})
-	return Object.freeze(Object.assign(fn, m(fn)))
+	}
+
+	const all_mutators = [mutators]
+		.flat()
+		.map(mutator_fn => mutator_fn(state))
+
+	return Object.freeze(Object.assign(state, ...all_mutators))
 }
