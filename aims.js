@@ -1,21 +1,18 @@
 export const aims = ({
-	a = Object.assign,
-	i = {},
-	m = [_state => {}],
-	accumulator = a,
-	initial_state = i,
-	mutators = m
+	a = Object.assign,	// accumulator
+	i = {},				// initial_state
+	m = [_state => {}]	// mutators
  } = {}) => {
-	let value = accumulator({}, initial_state)
+	let value = a({}, i)
 
 	const state = {
 		patch: object => {
-			value = accumulator({ ...value }, object)
+			value = a({ ...value }, object)
 		},
 		get: () => value,
 	}
 
-	const all_mutators = [mutators]
+	const all_mutators = [m]
 		.flat()
 		.map(mutator_fn => mutator_fn(state))
 
