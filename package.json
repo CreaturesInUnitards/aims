@@ -1,0 +1,11 @@
+{
+  "name": "aims-js",
+  "version": "0.1.0",
+  "description": "AIMS Is Managing State",
+  "main": "aims.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "creaturesinunitards",
+  "license": "MIT"
+}
