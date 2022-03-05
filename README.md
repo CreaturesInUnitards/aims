@@ -1,6 +1,21 @@
 # AIMS
-A tiny, stream-free riff on [@foxdonut's](https://github.com/foxdonut) 
-brilliant and elegant [Meiosis pattern](https://meiosis.js.org). 
+A tiny, **stream-free*** riff on [@foxdonut's](https://github.com/foxdonut) 
+brilliant and elegant [Meiosis pattern](https://meiosis.js.org).  
+  
+_* That's right, no streams were harmed in the making of this package. 
+But of course you can bring some of your own if you want._ 
+
+## What and (more importantly) WHY is it?  
+###_AIMS is Managing State_  
+I love Meiosis. I also love a nice [godref](https://www.urbandictionary.com/define.php?term=godref).
+I want my local state CRUD to be wrapped in a single thingy. So here we 
+are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
+both infrastructure and methodology for managing application state, 
+without requiring users to be self-loathing or good at wrestling*. Oh and 
+it's also < 200 bytes with zero dependencies.  
+  
+_* Meiosis doesn't have these requirements either, but many other state 
+management approaches do. You know who you are._
 
 ## Installation
 `npm i -S aims-js`
@@ -12,7 +27,14 @@ brilliant and elegant [Meiosis pattern](https://meiosis.js.org).
 | `i`  | object              | **Initial** state object                    | `{}`            |
 | `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`            |
 
+## Methods
+|  | usage                | description                                 |
+|------|---------------------|------------------------------------------|
+| `get`  | `const foo = state.get()` | returns the current state |
+| `patch`  | `state.patch({ bar: 'baz' })` | uses the `a` function to apply the passed-in patch, which in turn generates a whole new `state` |
+
 ## Usage
+### _Accumulator + Initial_state + Mutators = State_ 
 
 Begin here:
 
