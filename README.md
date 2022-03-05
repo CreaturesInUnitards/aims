@@ -6,7 +6,7 @@ _* That's right, no streams were harmed in the making of this package.
 But of course you can bring some of your own if you want._ 
 
 ## What and (more importantly) WHY is it?  
-###_AIMS is Managing State_  
+### _AIMS is Managing State_  
 I love Meiosis. I also love a nice [godref](https://www.urbandictionary.com/define.php?term=godref).
 I want my local state CRUD to be wrapped in a single thingy. So here we 
 are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
