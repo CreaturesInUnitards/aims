@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "description": "AIMS Is Managing State",
   "repository": "github:creaturesinunitards/aims",
-  "main": "aims.cjs.min.js",
+  "main": "aims.min.js",
   "module": "aims.min.js",
   "scripts": {
     "test": ""
