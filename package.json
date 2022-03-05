@@ -4,6 +4,7 @@
   "description": "AIMS Is Managing State",
   "repository": "github:creaturesinunitards/aims",
   "main": "aims.min.js",
+  "type": "module",
   "scripts": {
     "test": ""
   },
