@@ -69,7 +69,7 @@ use @barneycarroll's [patchinko](https://github.com/barneycarroll/patchinko) or
 @fuzetsu's [mergerino](https://github.com/fuzetsu/mergerino):
 
 ```js
-import { merge } from 'mergerino'
+import merge from 'mergerino'
 const state = aims({ a: merge })
 ```
 
