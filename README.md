@@ -82,6 +82,7 @@ const i = {
     name: 'Jerry',
     thought: 'some of us are ridiculous'
 }
+
 const state = aims({ i })
 const { name, thought } = state.get()
 console.log(name, thought) // Jerry, some of us are ridiculous
@@ -97,6 +98,7 @@ const mutators = state => ({
         state.patch({ foo })
     }
 })
+
 const state = aims({ m: mutators })
 
 /* ...somwhere in your code... */
@@ -117,14 +119,19 @@ In this case, it may be advisable to set namespaces, since `aims` is
 determinedly tiny and won't detect collisions for you.
 ```js
 // create the "Socket" namespace
-const SocketActions = state => ({
+const SocketMutators = state => ({
     Socket: {
         setFoo: foo => {
             state.patch({ foo })
         }
     }
 })
-const state = aims({m: SocketActions})
+// ...and the "REST" namespace 
+const RESTMutators = state => ({
+    REST: {...}
+})
+
+const state = aims({m: [SocketMutators, RESTMutators]})
 
 // destructure state — NOT state.get() 
 const { Socket } = state
@@ -145,7 +152,7 @@ implementation might look like this:
 
 ```js
 const a = (acc, patch) => {
-    // update the URL on route changes  
+    // update the route on filter changes  
     if (patch.filter) m.route.set('/' + patch.filter)
     
     // update localStorage with new state
@@ -154,6 +161,7 @@ const a = (acc, patch) => {
     
     return new_state
 }
+
 const state = aims({ a })
 ```
 
