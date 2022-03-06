@@ -166,9 +166,9 @@ const state = aims({ a })
 ```
 
 ## Examples
-- [Two-way binding](https://tinyurl.com/aims-two-way-binding)
-- [8-bit color picker](https://tinyurl.com/8-bit-color-picker)
-- [TodoMVC](https://tinyurl.com/todoapp-aims-mithril)
+- [Two-way binding](https://tinyurl.com/aims-two-way-bindings)
+- [8-bit color picker](https://tinyurl.com/aims-8bit-color-picker)
+- [TodoMVC](https://tinyurl.com/aims-m-todos)
 
 ## _Appendix: mapping to redraw_
 I made AIMS with MithrilJS in mind. It works out great! But a big part 
@@ -185,4 +185,4 @@ const a = (then, now) => {
 }
 const state = aims({ a })
 ```
-[Here's a quick React example](https://tinyurl.com/aims-basic-react)
+[Here's a quick React example](https://tinyurl.com/aims-quick-react)
