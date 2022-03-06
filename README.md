@@ -43,7 +43,7 @@ These are attached to the returned `aims` instance:
 Begin here:
 
 ```js
-import { aims } from 'aims-js'
+import aims from 'aims-js'
 const state = aims()
 ```
 

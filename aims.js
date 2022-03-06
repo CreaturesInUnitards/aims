@@ -1,4 +1,4 @@
-export const aims = ({
+export default ({
 	a = Object.assign,	// accumulator
 	i = {},				// initial_state
 	m = [_state => {}]	// mutators
