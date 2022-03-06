@@ -5,7 +5,7 @@ brilliant and elegant [Meiosis pattern](https://meiosis.js.org).
 _* That's right, no streams were harmed in the making of this package. 
 But of course you can bring some of your own if you want._ 
 
-## What and (more importantly) WHY is it?  
+## What (and more importantly WHY) is it?  
 ### _AIMS is Managing State_  
 I love Meiosis. I also love a nice [godref](https://www.urbandictionary.com/define.php?term=godref).
 I want my local state CRUD to be wrapped in a single thingy. So here we 
@@ -21,13 +21,17 @@ management approaches do. You know who you are._
 `npm i -S aims-js`
 
 ## Properties
-|  | type                | description                                 | default         |
-|------|---------------------|---------------------------------------------|-----------------|
-| `a`  | function            | **Accumulator**: `(a, b) => ({})` | `Object.assign` |
-| `i`  | object              | **Initial** state object                    | `{}`            |
+These are passed at instantiation to `aims`:
+
+|      | type                | description                                          | default         |
+|------|---------------------|------------------------------------------------------|-----------------|
+| `a`  | function            | **Accumulator**: `(a, b) => ({})`                    | `Object.assign` |
+| `i`  | object              | **Initial** state object                             | `{}`            |
 | `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`            |
 
 ## Methods
+These are attached to the returned `aims` instance:
+
 |  | usage                | description                                 |
 |------|---------------------|------------------------------------------|
 | `get`  | `const foo = state.get()` | returns the current state |
@@ -65,7 +69,7 @@ use @barneycarroll's [patchinko](https://github.com/barneycarroll/patchinko) or
 @fuzetsu's [mergerino](https://github.com/fuzetsu/mergerino):
 
 ```js
-import {merge} from 'mergerino'
+import { merge } from 'mergerino'
 const state = aims({ a: merge })
 ```
 
@@ -85,8 +89,7 @@ console.log(name, thought) // Jerry, some of us are ridiculous
 
 ## Mutators: `m`
 
-Mutators, a.k.a. "actions", are functions which mutate our state. 
-AIMS attaches them to the `state` object as "methods".
+Mutators are easier to illustrate than to explain: 
 
 ```js
 const mutators = state => ({
@@ -100,28 +103,78 @@ const state = aims({ m: mutators })
 
 onclick: e => { state.setFoo(e.target.textContent) }
 ```
-You may even have multiple, discrete sets of mutators, e.g.
+Each mutator is a closure which accepts `state` as its parameter,
+and returns an object with `state` in scope. `aims` attaches the
+properties of each returned object to `state`, so references can
+be made via `state.myMethod`.
+
+You may have multiple, discrete sets of mutators, e.g.
 `SocketMutators` and `RESTMutators`.  
 ```js
 const state = aims({ m: [SocketMutators, RESTMutators] })
 ```
+In this case, it may be advisable to set namespaces, since `aims` is
+determinedly tiny and won't detect collisions for you.
+```js
+// create the "Socket" namespace
+const SocketActions = state => ({
+    Socket: {
+        setFoo: foo => {
+            state.patch({ foo })
+        }
+    }
+})
+const state = aims({m: SocketActions})
+
+// destructure state — NOT state.get() 
+const { Socket } = state
+Socket.setFoo('jack')
+
+console.log(state.get()) // { foo: 'jack' }
+```
 
 ## Patch inspection
 
-Sometimes there are imperatives associated with particular state changes. A 
-great example is in TodoMVC: every data change must be persisted, as must 
-every route change. Additionally, route changes need to update the URL. 
-Rather than having several different mutators each kicking off the persistence 
-routines, we can use a custom accumulator to inspect incoming patches and 
+Sometimes there are imperatives associated with particular state changes. 
+TodoMVC is a great example — every data change must be persisted, as must 
+every `filter` change, which must change the URL for routing purposes. 
+Rather than having several mutators each kicking off persistence and 
+routing, we can use a custom accumulator to inspect incoming patches and 
 respond accordingly, all in one place. A [Mithril](https://mithril.js.org) 
 implementation might look like this: 
 
 ```js
 const a = (acc, patch) => {
-    if (patch.route) m.route.set('/' + patch.route)
+    // update the URL on route changes  
+    if (patch.filter) m.route.set('/' + patch.filter)
+    
+    // update localStorage with new state
     const new_state = Object.assign(acc, patch)
-    localStorage.setItem('todoapp-aims-mithril', JSON.stringify(new_state))
+    localStorage.setItem('todoapp-aims-m', JSON.stringify(new_state))
+    
     return new_state
 }
 const state = aims({ a })
 ```
+
+## Examples
+- [Two-way binding](https://tinyurl.com/aims-two-way-binding)
+- [8-bit color picker](https://tinyurl.com/8-bit-color-picker)
+- [TodoMVC](https://tinyurl.com/todoapp-aims-mithril)
+
+## _Appendix: mapping to redraw_
+I made AIMS with MithrilJS in mind. It works out great! But a big part 
+of why is that Mithril's autoredraw takes care of itself. If you want 
+to use AIMS with other view libraries, you'll almost certainly need to 
+use a custom accumulator which calls your rendering function after 
+patching. Since the rendering function will need to pass `state` to the 
+view, and since the `state` reference inside the accumulator's closure
+is now stale, the rendering function must be called asynchronously:
+```js
+const a = (then, now) => {
+    requestAnimationFrame(() => { MyViewLibrary.render(MyView(state)) })
+    return Object.assign({...then}, now)
+}
+const state = aims({ a })
+```
+[Here's a quick React example](https://tinyurl.com/aims-basic-react)
