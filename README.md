@@ -25,7 +25,7 @@ These are passed at instantiation to `aims`:
 
 |      | type                | description                                          | default         |
 |------|---------------------|------------------------------------------------------|-----------------|
-| `a`  | function            | **Accumulator**: `(a, b) => ({})`                    | `Object.assign` |
+| `a`  | function            | **Accumulator**: `(x, y) => ({})`                    | `(x, y) => Object.assign({ ...x }, y)` |
 | `i`  | object              | **Initial** state object                             | `{}`            |
 | `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`            |
 
@@ -60,7 +60,7 @@ Ok, now let's access our state:
 
 ```js
 const { name, height } = state.get()
-console.log(name, height) // Flerb, not a lot
+console.log(name, height) // Flerb not a lot
 ```
 
 ## Accumulator function: `a`

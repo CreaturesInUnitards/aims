@@ -1,5 +1,5 @@
 export default ({
-	a = Object.assign,	// accumulator
+	a = (x, y) => Object.assign({ ...x }, y),	// accumulator
 	i = {},				// initial_state
 	m = [_state => {}]	// mutators
  } = {}) => {
@@ -7,7 +7,7 @@ export default ({
 
 	const state = {
 		patch: object => {
-			value = a({ ...value }, object)
+			value = a(value, object)
 		},
 		get: () => value,
 	}
