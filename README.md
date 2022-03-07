@@ -32,10 +32,10 @@ These are passed at instantiation to `aims`:
 ## Methods
 These are attached to the returned `aims` instance:
 
-|  | usage                | description                                 |
-|------|---------------------|------------------------------------------|
-| `get`  | `const foo = state.get()` | returns the current state |
-| `patch`  | `state.patch({ bar: 'baz' })` | uses the `a` function to apply the passed-in patch, which in turn generates a whole new `state` |
+|        | usage                                             | description                                 |
+|--------|---------------------------------------------------|------------------------------------------|
+| `get`  | `const foo = state.get()`                         | returns the current state |
+| `patch`| `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state` |
 
 ## Usage
 ### _Accumulator + Initial_state + Mutators = State_ 
