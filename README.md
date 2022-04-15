@@ -12,7 +12,7 @@ I want my local state CRUD to be wrapped in a single thingy. So here we
 are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
 both infrastructure and methodology for managing application state, 
 without requiring users to be self-loathing or good at wrestling*. Oh and 
-it's also < 200 bytes with zero dependencies.  
+it's also < 250 bytes with zero dependencies.  
   
 _* Meiosis doesn't have these requirements either, but many other state 
 management approaches do. You know who you are._
@@ -28,6 +28,7 @@ These are passed at instantiation to `aims`:
 | `a`  | function            | **Accumulator**: `(x, y) => ({})`                    | `(x, y) => Object.assign({ ...x }, y)` |
 | `i`  | object              | **Initial** state object                             | `{}`            |
 | `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`            |
+| `s`  | boolean             | **Safemode**                                         | `false`         |
 
 ## Methods
 These are attached to the returned `aims` instance:
@@ -38,7 +39,7 @@ These are attached to the returned `aims` instance:
 | `patch`| `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state` |
 
 ## Usage
-### _Accumulator + Initial_state + Mutators = State_ 
+### _Accumulator, Initial_state, Mutators, Safemode_ 
 
 Begin here:
 
@@ -85,7 +86,7 @@ const i = {
 
 const state = aims({ i })
 const { name, thought } = state.get()
-console.log(name, thought) // Jerry, some of us are ridiculous
+console.log(name, thought) // Jerry some of us are ridiculous
 ```
 
 ## Mutators: `m`
@@ -139,6 +140,25 @@ Socket.setFoo('jack')
 
 console.log(state.get()) // { foo: 'jack' }
 ```
+
+## Safemode: `s`
+
+In larger codebases, it may be desirable to restrict mutations to actions 
+only, eliminating occurences of `state.patch({...})` within application 
+views and elsewhere. Safemode achieves this by omitting `state.patch` and 
+instead passing the patching function as a second parameter to Mutators, e.g.
+
+```js
+const state = aims({
+  s: true,
+  m: (state, patch) => ({
+    setFoo: foo => {
+      patch({ foo })
+    }
+  })
+})
+```
+
 
 ## Patch inspection
 
