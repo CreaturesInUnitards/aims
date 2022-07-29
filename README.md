@@ -23,12 +23,14 @@ management approaches do. You know who you are._
 ## Properties
 These are passed at instantiation to `aims`:
 
-|      | type                | description                                          | default         |
-|------|---------------------|------------------------------------------------------|-----------------|
-| `a`  | function            | **Accumulator**: `(x, y) => ({})`                    | `(x, y) => Object.assign({ ...x }, y)` |
-| `i`  | object              | **Initial** state object                             | `{}`            |
-| `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`            |
-| `s`  | boolean             | **Safemode**                                         | `false`         |
+|      | type                | description                                          | default  |
+|------|---------------------|------------------------------------------------------|----------|
+| `a`  | function            | **Accumulator**: `(x, y) => ({})`                    | `merge`* |
+| `i`  | object              | **Initial** state object                             | `{}`     |
+| `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`     |
+| `s`  | boolean             | **Safemode**                                         | `false`  |
+
+_* `merge` is a slightly modified port of `mergerino` by [@fuzetsu](https://github.com/fuzetsu)._
 
 ## Methods
 These are attached to the returned `aims` instance:
@@ -65,13 +67,13 @@ console.log(name, height) // Flerb not a lot
 ```
 
 ## Accumulator function: `a`
-Any function with the signature `(a,b) => ({})` will do. Perhaps you want to 
-use @barneycarroll's [patchinko](https://github.com/barneycarroll/patchinko) or 
-@fuzetsu's [mergerino](https://github.com/fuzetsu/mergerino):
+Any function with the signature `(previous_state, incoming_patch) => ({})` will do:
 
 ```js
-import merge from 'mergerino'
-const state = aims({ a: merge })
+// low-rent, shallow immutability
+const state = aims({ 
+  a: (prev, incoming) => Object.assign({}, prev, incoming) 
+})
 ```
 
 ## Initial state object: `i`
