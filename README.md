@@ -12,7 +12,7 @@ I want my local state CRUD to be wrapped in a single thingy. So here we
 are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
 both infrastructure and methodology for managing application state, 
 without requiring users to be self-loathing or good at wrestling*. Oh and 
-it's also < 250 bytes with zero dependencies.  
+it's also just over 700 bytes with zero dependencies.  
   
 _* Meiosis doesn't have these requirements either, but many other state 
 management approaches do. You know who you are._
@@ -171,12 +171,13 @@ respond accordingly, all in one place. A [Mithril](https://mithril.js.org)
 implementation might look like this: 
 
 ```js
-const a = (acc, patch) => {
+import aims, { merge } from 'aims-js'
+const a = (prev, incoming) => {
     // update the route on filter changes  
-    if (patch.filter) m.route.set('/' + patch.filter)
+    if (incoming.filter) m.route.set('/' + incoming.filter)
     
     // update localStorage with new state
-    const new_state = Object.assign(acc, patch)
+    const new_state = Object.assign({}, prev, incoming)
     localStorage.setItem('todoapp-aims-m', JSON.stringify(new_state))
     
     return new_state
