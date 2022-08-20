@@ -1,10 +1,12 @@
 /**
+ * AIMS Is Managing State
+ *
  * mergerino by @fuzetsu
  * Copyright (c) 2019 Daniel Loomer
  * Forked and codemodded, waiting on pull
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
- export const merge = (() => {
+export const merge = (() => {
 	const run = (isArr, copy, patch) => {
 		const type = typeof patch
 		if (patch && type === 'object') {
@@ -37,12 +39,25 @@ export default ({
 	m = [_state => {}],         // mutators
 	s = false                   // safemode
 } = {}) => {
+
+	let redraw = false
 	let value = a({}, i)
 	const patch = object => {
 		value = a(value, object)
 	}
 
 	const state = Object.assign({ get: () => value }, !s && { patch })
+	state.redraw = fn => {
+		if (!redraw) {
+			redraw = true
+			const old_a = a
+			a = (x, y) => {
+				requestAnimationFrame(() => { fn(state) })
+				return old_a(x, y)
+			}
+			fn(state)
+		}
+	}
 
 	const all_mutators = [m]
 	.flat()
@@ -50,6 +65,3 @@ export default ({
 
 	return Object.freeze(Object.assign(state, ...all_mutators))
 }
-
-
-

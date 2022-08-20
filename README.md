@@ -35,10 +35,21 @@ _* `merge` is a slightly modified port of `mergerino` by [@fuzetsu](https://gith
 ## Methods
 These are attached to the returned `aims` instance:
 
-|        | usage                                             | description                                 |
-|--------|---------------------------------------------------|------------------------------------------|
-| `get`  | `const foo = state.get()`                         | returns the current state |
-| `patch`| `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state` |
+|         | usage                                             | description                                                                                         |
+|---------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `get`   | `const foo = state.get()`                         | returns the current state                                                                           |
+| `patch` | `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state`  |
+
+
+
+
+
+// TODO - `redraw`
+
+
+
+
+
 
 ## Usage
 ### _Accumulator, Initial_state, Mutators, Safemode_ 
