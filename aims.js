@@ -1,10 +1,13 @@
 /**
- * mergerino by @fuzetsu
+ * AIMS Is Managing State
+ * (Accumulator, Initial_state, Mutators, Safemode)
+ *
+ * The default AIMS accumulator is mergerino by @fuzetsu
  * Copyright (c) 2019 Daniel Loomer
  * Forked and codemodded, waiting on pull
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
- export const merge = (() => {
+export const merge = (() => {
 	const run = (isArr, copy, patch) => {
 		const type = typeof patch
 		if (patch && type === 'object') {
@@ -31,16 +34,18 @@
 	return merge
 })()
 
-export default ({
-	a = merge, 									// accumulator
-	i = {},                    	// initial_state
-	m = [_state => {}],         // mutators
-	s = false                   // safemode
-} = {}) => {
+export default (
+	{
+		a = merge, 					// accumulator
+		i = {},             // initial_state
+		m = [_state => {}], // mutators
+		s = false           // safemode
+	} = {},
+	render
+) => {
 	let value = a({}, i)
-	const patch = object => {
-		value = a(value, object)
-	}
+
+	const patch = patch => { value = a(value, patch) }
 
 	const state = Object.assign({ get: () => value }, !s && { patch })
 
@@ -48,8 +53,16 @@ export default ({
 	.flat()
 	.map(mutator_fn => mutator_fn(state, s && patch))
 
-	return Object.freeze(Object.assign(state, ...all_mutators))
+	Object.assign(state, ...all_mutators)
+
+	render && requestAnimationFrame(() => {
+		const old_a = a
+		a = (x, y) => {
+			requestAnimationFrame(() => { render(state) })
+			return old_a(x, y)
+		}
+		render(state)
+	})
+
+	return Object.freeze(state)
 }
-
-
-
