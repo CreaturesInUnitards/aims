@@ -29,27 +29,18 @@ These are passed at instantiation to `aims`:
 | `i`  | object              | **Initial** state object                             | `{}`     |
 | `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`     |
 | `s`  | boolean             | **Safemode**                                         | `false`  |
-
+  
 _* `merge` is a slightly modified port of `mergerino` by [@fuzetsu](https://github.com/fuzetsu)._
 
 ## Methods
 These are attached to the returned `aims` instance:
 
-|         | usage                                             | description                                                                                         |
-|---------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `get`   | `const foo = state.get()`                         | returns the current state                                                                           |
-| `patch` | `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state`  |
-
-
-
-
-
-// TODO - `redraw`
-
-
-
-
-
+|          | usage                                             | description                                                                                         |
+|----------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `get`    | `const foo = state.get()`                         | returns the current state                                                                           |
+| `patch`* | `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state`  |
+  
+_* In AIMS parlance, the word "patch" has dual meanings: as a verb, it's the method we use to "patch" our state with new values; as a noun, it's the object which provides those values. Try not to use both in the same sentence :) "Patrick, please patch our state with this patch."_
 
 ## Usage
 ### _Accumulator, Initial_state, Mutators, Safemode_ 
