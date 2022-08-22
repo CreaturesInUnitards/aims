@@ -5,9 +5,6 @@
   "repository": "github:creaturesinunitards/aims",
   "main": "aims.min.js",
   "module": "aims.min.js",
-  "scripts": {
-    "test": ""
-  },
   "author": "creaturesinunitards",
   "license": "MIT"
 }

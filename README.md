@@ -199,24 +199,23 @@ const a = (prev, incoming) => {
 const state = aims({ a })
 ```
 
+## RenderFn
+I made AIMS with MithrilJS in mind, which works seamlessly. But a big part
+of why is that Mithril's auto-redraw takes care of itself. To use AIMS with
+other view libraries, you'll almost certainly need to use the second argument
+to pass a function which performs your root render. So for e.g. React:
+
+```jsx
+import { aims } from 'aims-js'
+import { createRoot } from 'ReactDOM'
+
+const root = document.getElementById('app')
+const state = aims({}, _state => {
+  root.render(<App state={_state} />)
+})
+```
+
 ## Examples
 - [Two-way binding](https://tinyurl.com/aims-two-way-bindings)
 - [8-bit color picker](https://tinyurl.com/aims-8bit-color-picker)
 - [TodoMVC](https://tinyurl.com/aims-m-todos)
-
-## _Appendix: mapping to redraw_
-I made AIMS with MithrilJS in mind. It works out great! But a big part 
-of why is that Mithril's autoredraw takes care of itself. If you want 
-to use AIMS with other view libraries, you'll almost certainly need to 
-use a custom accumulator which calls your rendering function after 
-patching. Since the rendering function will need to pass `state` to the 
-view, and since the `state` reference inside the accumulator's closure
-is now stale, the rendering function must be called asynchronously:
-```js
-const a = (then, now) => {
-    requestAnimationFrame(() => { MyViewLibrary.render(MyView(state)) })
-    return Object.assign({...then}, now)
-}
-const state = aims({ a })
-```
-[Here's a quick React example](https://tinyurl.com/aims-quick-react)
