@@ -12,7 +12,7 @@ I want my local state CRUD to be wrapped in a single thingy. So here we
 are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
 both infrastructure and methodology for managing application state, 
 without requiring users to be self-loathing or good at wrestling*. Oh and 
-it's also just over 700 bytes with zero dependencies.  
+it's also under 800 bytes with zero dependencies.  
   
 _* Meiosis doesn't have these requirements either, but many other state 
 management approaches do. You know who you are._
