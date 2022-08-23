@@ -1,11 +1,19 @@
 {
   "name": "aims-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AIMS Is Managing State",
   "repository": "github:creaturesinunitards/aims",
   "main": "aims.min.js",
   "module": "aims.min.js",
   "author": "CreaturesInUnitards (Scott Simpson) <portrayme@mac.com>",
-  "keywords": ["state", "state management", "immutable", "unidirectional", "flow", "micro", "micro-library"],
+  "keywords": [
+    "state",
+    "state management",
+    "immutable",
+    "unidirectional",
+    "flow",
+    "micro",
+    "micro-library"
+  ],
   "license": "MIT"
 }
