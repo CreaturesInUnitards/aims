@@ -200,7 +200,7 @@ to pass a function which performs your root render. So for e.g. React:
 import { aims } from 'aims-js'
 import { createRoot } from 'ReactDOM'
 
-const root = document.getElementById('app')
+const root = createRoot(document.getElementById('app'))
 const state = aims({}, _state => {
   root.render(<App state={_state} />)
 })

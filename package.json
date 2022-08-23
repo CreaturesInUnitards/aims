@@ -5,6 +5,7 @@
   "repository": "github:creaturesinunitards/aims",
   "main": "aims.min.js",
   "module": "aims.min.js",
-  "author": "creaturesinunitards",
+  "author": "CreaturesInUnitards (Scott Simpson) <portrayme@mac.com>",
+  "keywords": ["state", "state management", "immutable", "unidirectional", "flow", "micro", "micro-library"],
   "license": "MIT"
 }
