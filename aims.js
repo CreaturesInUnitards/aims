@@ -43,26 +43,20 @@ export default (
 	} = {},
 	render
 ) => {
-	let value = a({}, i)
+	let value = a({}, i), state
 
-	const patch = patch => { value = a(value, patch) }
+	const patch = patch => {
+		value = a(value, patch)
+		render && render(state)
+	}
 
-	const state = Object.assign({ get: () => value }, !s && { patch })
+	state = Object.assign({ get: () => value }, !s && { patch })
 
 	const all_mutators = [m]
 	.flat()
 	.map(mutator_fn => mutator_fn(state, s && patch))
 
 	Object.assign(state, ...all_mutators)
-
-	render && requestAnimationFrame(() => {
-		const old_a = a
-		a = (x, y) => {
-			requestAnimationFrame(() => { render(state) })
-			return old_a(x, y)
-		}
-		render(state)
-	})
-
+	render && render(state)
 	return Object.freeze(state)
 }
