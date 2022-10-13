@@ -12,7 +12,7 @@ I want my local state CRUD to be wrapped in a single thingy. So here we
 are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
 both infrastructure and methodology for managing application state, 
 without requiring users to be self-loathing or good at wrestling*. Oh and 
-it's also under 800 bytes with zero dependencies.  
+it's also just over 750 bytes with zero dependencies.  
   
 _* Meiosis doesn't have these requirements either, but many other state 
 management approaches do. You know who you are._
@@ -56,8 +56,8 @@ Now `state` is ready to use. Give it some properties:
 
 ```js
 state.patch({ 
-    name: 'Flerb', 
-    height: 'not a lot' 
+    name: 'Jack', 
+    height: 'Short' 
 })
 ```
 
@@ -65,7 +65,7 @@ Ok, now let's access our state:
 
 ```js
 const { name, height } = state.get()
-console.log(name, height) // Flerb not a lot
+console.log(name, height) // Jack Short
 ```
 
 ## Accumulator function: `a`
@@ -84,13 +84,13 @@ Of course, in our first example, we could've set `name, height` at initializatio
 
 ```js
 const i = {
-    name: 'Jerry',
-    thought: 'some of us are ridiculous'
+    name: 'Toby',
+    thought: 'I like pie'
 }
 
 const state = aims({ i })
 const { name, thought } = state.get()
-console.log(name, thought) // Jerry some of us are ridiculous
+console.log(name, thought) // Toby I like pie
 ```
 
 ## Mutators: `m`
@@ -190,19 +190,25 @@ const a = (prev, incoming) => {
 const state = aims({ a })
 ```
 
-## RenderFn
-I made AIMS with MithrilJS in mind, which works seamlessly. But a big part
-of why is that Mithril's auto-redraw takes care of itself. To use AIMS with
-other view libraries, you'll almost certainly need to use the second argument
-to pass a function which performs your root render. So for e.g. React:
+## Integrating with view libraries*  
+
+_* Unless you're using an auto-redrawing library or framework like Mithril.js, in which case you can skip this step._  
+
+To render your view, pass a function to the second argument of `aims`, which 
+in turn takes `state` as its own argument, and render your App within the 
+function. So for e.g. React:
 
 ```jsx
 import { aims } from 'aims-js'
 import { createRoot } from 'ReactDOM'
 
 const root = createRoot(document.getElementById('app'))
-const state = aims({}, _state => {
-  root.render(<App state={_state} />)
+
+// Here the reference returned from `aims` is 
+// unneeded, since we pass `state` to the function 
+// provided, so we can just call `aims` directly
+aims({}, state => {
+  root.render(<App state={state} />)
 })
 ```
 
