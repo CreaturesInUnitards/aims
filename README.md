@@ -7,9 +7,8 @@ But of course you can bring some of your own if you want._
 
 ## What (and more importantly WHY) is it?  
 ### _AIMS Is Managing State_  
-I love Meiosis. I also love a nice [godref](https://www.urbandictionary.com/define.php?term=godref).
-I want my local state CRUD to be wrapped in a single thingy. So here we 
-are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
+I love Meiosis. I also love a nice [godref](https://www.urbandictionary.com/define.php?term=godref). 
+So here we are: AIMS uses the kernel of the Meiosis pattern, shallowly, to create 
 both infrastructure and methodology for managing application state, 
 without requiring users to be self-loathing or good at wrestling*. Oh and 
 it's also just over 750 bytes with zero dependencies.  
@@ -23,27 +22,31 @@ management approaches do. You know who you are._
 ## Properties
 These are passed at instantiation to `aims`:
 
-|      | type                | description                                          | default  |
-|------|---------------------|------------------------------------------------------|----------|
-| `a`  | function            | **Accumulator**: `(x, y) => ({})`                    | `merge`* |
-| `i`  | object              | **Initial** state object                             | `{}`     |
-| `m`  | function or array   | **Mutators**: `state => ({})` (or an array of these) | `[]`     |
-| `s`  | boolean             | **Safemode**                                         | `false`  |
+|      | type                | description                                                                 | default  |
+|------|---------------------|-----------------------------------------------------------------------------|----------|
+| `a`  | function            | **Accumulator**: `(x, y) => ({})`                                           | `merge`* |
+| `i`  | object              | **Initial** state object                                                    | `{}`     |
+| `m`  | function or array   | **Mutators/Measurements**: `(state, patch?) => ({})` (or an array of these) | `[]`     |
+| `s`  | boolean             | **Safemode**                                                                | `false`  |
   
-_* `merge` is a slightly modified port of `mergerino` by [@fuzetsu](https://github.com/fuzetsu)._
+_* `merge` is a slightly modified port of `mergerino` by [@fuzetsu](https://github.com/fuzetsu/mergerino)._
 
 ## Methods
 These are attached to the returned `aims` instance:
 
-|          | usage                                             | description                                                                                         |
-|----------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `get`    | `const foo = state.get()`                         | returns the current state                                                                           |
-| `patch`* | `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state`  |
+|             | usage                                             | description                                                                                         |
+|-------------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `get`       | `const foo = state.get()`                         | returns the current state                                                                           |
+| `patch`* ** | `state.patch({ bar: 'baz' })`                     | uses the `a` function to apply the passed-in patch,<br>which in turn generates a whole new `state`  |
   
-_* In AIMS parlance, the word "patch" has dual meanings: as a verb, it's the method we use to "patch" our state with new values; as a noun, it's the object which provides those values. Try not to use both in the same sentence :) "Patrick, please patch our state with this patch."_
+_* In AIMS parlance, the word "patch" has dual meanings: as a verb, it's the 
+method we use to "patch" our state with new values; as a noun, it's the object which provides those values. Try not to use both in the same sentence :) "Patrick, please patch our state with this patch."_  
+
+_** In `safemode`, `patch` is not a property of `state`, and 
+instead is passed as the second argument to `m`._
 
 ## Usage
-### _Accumulator, Initial_state, Mutators, Safemode_ 
+### _Accumulator, Initialization, Mutators/Measurements, Safemode_ 
 
 Begin here:
 
@@ -69,7 +72,7 @@ console.log(name, height) // Jack Short
 ```
 
 ## Accumulator function: `a`
-Any function with the signature `(previous_state, incoming_patch) => ({})` will do:
+Any function with the signature `(previous_state, incoming_patch) => ({})` (e.g. `Object.assign`) will do:
 
 ```js
 // low-rent, shallow immutability
@@ -78,30 +81,44 @@ const state = aims({
 })
 ```
 
-## Initial state object: `i`
-
+## Initialization: `i`
 Of course, in our first example, we could've set `name, height` at initialization:
 
 ```js
 const i = {
-    name: 'Toby',
-    thought: 'I like pie'
+    name: 'Mike',
+    height: 'Average'
 }
 
 const state = aims({ i })
-const { name, thought } = state.get()
-console.log(name, thought) // Toby I like pie
+const { name, height } = state.get()
+console.log(name, height) // Mike Average
 ```
 
 ## Mutators: `m`
-
 Mutators are easier to illustrate than to explain: 
 
 ```js
-const mutators = state => ({
-    setFoo: foo => {
-        state.patch({ foo })
-    }
+const m = state => ({
+    //  MUTATION FUNCTIONS: 
+    //  apply patches to state
+    
+    setFirstName: firstName => {
+        state.patch({ firstName })
+    },
+    setLastName: lastName => {
+        state.patch({ lastName })
+    },
+  
+    // MEASUREMENT FUNCTIONS: 
+    // side effects, computations, and whatever 
+    // else you want to be able to access via 
+    // `state.myMeasurement(...)`
+    fullName: () => {
+      const { firstName, lastName } = state.get()
+      return `${firstName} ${{lastName}}`
+    },
+    
 })
 
 const state = aims({ m: mutators })
@@ -112,8 +129,8 @@ onclick: e => { state.setFoo(e.target.textContent) }
 ```
 Each mutator is a closure which accepts `state` as its parameter,
 and returns an object with `state` in scope. `aims` attaches the
-properties of each returned object to `state`, so references can
-be made via `state.myMethod`.
+properties of each returned object to `state`, so calls can
+be made via `state.myMethod(...)`.
 
 You may have multiple, discrete sets of mutators, e.g.
 `SocketMutators` and `RESTMutators`.  
@@ -146,7 +163,6 @@ console.log(state.get()) // { foo: 'jack' }
 ```
 
 ## Safemode: `s`
-
 In larger codebases, it may be desirable to restrict mutations to actions 
 only, eliminating occurences of `state.patch({...})` within application 
 views and elsewhere. Safemode achieves this by omitting `state.patch` and 
@@ -163,9 +179,7 @@ const state = aims({
 })
 ```
 
-
 ## Patch inspection
-
 Sometimes there are imperatives associated with particular state changes. 
 TodoMVC is a great example — every data change must be persisted, as must 
 every `filter` change, which must change the URL for routing purposes. 
@@ -181,7 +195,7 @@ const a = (prev, incoming) => {
     if (incoming.filter) m.route.set('/' + incoming.filter)
     
     // update localStorage with new state
-    const new_state = Object.assign({}, prev, incoming)
+    const new_state = merge(prev, incoming)
     localStorage.setItem('todoapp-aims-m', JSON.stringify(new_state))
     
     return new_state
@@ -190,8 +204,7 @@ const a = (prev, incoming) => {
 const state = aims({ a })
 ```
 
-## Integrating with view libraries*  
-
+## Integrating with view libraries*
 _* Unless you're using an auto-redrawing library or framework like Mithril.js, in which case you can skip this step._  
 
 To render your view, pass a function to the second argument of `aims`, which 
@@ -199,7 +212,7 @@ in turn takes `state` as its own argument, and render your App within the
 function. So for e.g. React:
 
 ```jsx
-import { aims } from 'aims-js'
+import aims from 'aims-js'
 import { createRoot } from 'ReactDOM'
 
 const root = createRoot(document.getElementById('app'))
