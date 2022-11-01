@@ -1,3 +1,10 @@
+# TS Demo
+`npm start`  
+  
+...  
+
+
+
 # AIMS
 A tiny, **stream-free*** riff on [@foxdonut's](https://github.com/foxdonut) 
 brilliant and elegant [Meiosis pattern](https://meiosis.js.org).  
