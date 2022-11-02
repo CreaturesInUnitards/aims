@@ -1,5 +1,5 @@
 import "./style.css";
-import { createState } from "./state";
+import { createState } from "./model/state";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>

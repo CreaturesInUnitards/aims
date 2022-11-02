@@ -17,7 +17,7 @@ const aims = <T, M>(
     m, // mutators
     s = false, // safemode
   }: AimsScaffold<T, M> = {},
-  render: (state: AimsState<T, M>) => void | null
+  render?: (state: AimsState<T, M>) => void
 ) => {
   type STATE = AimsState<T, M>;
 
