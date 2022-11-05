@@ -1,6 +1,6 @@
 {
   "name": "aims-js",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "AIMS Is Managing State",
   "repository": "github:creaturesinunitards/aims",
   "type": "module",
