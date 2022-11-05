@@ -14,7 +14,7 @@ const aims = <I, M>(
   {
     a = merge, // accumulator
     i, // initial_state
-    m, // mutators
+    m = [], // mutators
     s = false, // safemode
   }: AimsScaffold<I, M> = {},
   render?: (state: AimsState<I, M> | AimsSafeState<I, M>) => void

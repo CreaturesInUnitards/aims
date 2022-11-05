@@ -9,11 +9,11 @@
     "index.d.ts"
   ],
   "main": "./dist/aims.umd.cjs",
-  "module": "./dist/aims.js",
+  "module": "./dist/aims.es.js",
   "types": "./index.d.ts",
   "exports": {
     "types": "./index.d.ts",
-    "import": "./dist/aims.js",
+    "import": "./dist/aims.es.js",
     "require": "./dist/aims.umd.cjs"
   },
   "scripts": {
