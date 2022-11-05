@@ -1,5 +1,5 @@
 import aims from "../../lib/aims";
-import { AimsSafeState } from "../../index";
+import { AimsSafeState } from "../../aims";
 import { Foo, IFoo, MFoo, MuFoo } from "./Foo.model";
 import { Bar, IBar, MBar, MuBar } from "./Bar.model";
 

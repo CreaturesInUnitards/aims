@@ -1,4 +1,4 @@
-import { AimsSafeMutatorFn } from "../../index";
+import { AimsSafeMutatorFn } from "../../aims";
 
 export type IFoo = { $name: string; $hooba: number };
 export type MFoo = { setName: () => void };

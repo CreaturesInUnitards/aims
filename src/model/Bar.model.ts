@@ -1,4 +1,4 @@
-import { AimsSafeMutatorFn } from "../../index";
+import { AimsSafeMutatorFn } from "../../aims";
 
 export type IBar = { $thing: string };
 export type MBar = {
