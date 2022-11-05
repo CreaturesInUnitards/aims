@@ -8,34 +8,33 @@
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
 import merge from "./merge";
-import { AimsMutatorFn, AimsPatch, AimsScaffold, AimsState } from "../index";
+import { AimsPatch, AimsSafeState, AimsScaffold, AimsState } from "../index";
 
-const aims = <T, M>(
+const aims = <I, M>(
   {
     a = merge, // accumulator
     i, // initial_state
     m, // mutators
     s = false, // safemode
-  }: AimsScaffold<T, M> = {},
-  render?: (state: AimsState<T, M>) => void
+  }: AimsScaffold<I, M> = {},
+  render?: (state: AimsState<I, M> | AimsSafeState<I, M>) => void
 ) => {
-  type STATE = AimsState<T, M>;
+  type STATE = AimsState<I, M> | AimsSafeState<I, M>;
 
-  let value = a({} as T, i || {}),
-    state: STATE;
+  let value = a({} as I, i || {}),
+    state: any;
 
-  const patch = (update: AimsPatch<T>) => {
+  const patch = (update: AimsPatch<I>) => {
     value = a(value, update);
     render && render(state);
   };
 
-  state = Object.assign({ get: () => value }, !s && { patch }) as STATE;
+  state = Object.assign({ get: () => value }, !s && { patch });
 
-  const all_mutators = [m || []]
+  const all_mutators = [m]
     .flat()
-    .map((mutator_fn: AimsMutatorFn<T, M>) =>
-      s ? mutator_fn(state, patch) : mutator_fn(state)
-    );
+    // @ts-ignore
+    .map((mutatorFn) => mutatorFn(state, !!s && patch));
 
   Object.assign(state, ...all_mutators);
   render && render(state);

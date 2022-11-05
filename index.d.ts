@@ -1,20 +1,28 @@
-export type AimsPatch<StateObject> = Partial<StateObject>;
+/**
+ * I: I, essentially { [prop: string]: any }
+ * M: M, essentially (...args?) => any
+ * */
 
-export type AimsState<StateObject, MutatorObject> = MutatorObject & {
-  get: () => StateObject;
-  patch: (update: AimsPatch<StateObject>) => void;
+type AimsOpenObject = { [prop: string]: any };
+
+export type AimsPatch<I> = Partial<I>;
+
+export type AimsSafeState<I, M> = M & { get: () => I };
+
+export type AimsState<I, M> = AimsSafeState<I, M> & {
+  patch: (update: AimsPatch<I>) => void;
 };
 
-export type AimsMutatorFn<StateObject, MutatorObject> = (
-  state: AimsState<StateObject, MutatorObject>,
-  patch?: (update: AimsPatch<StateObject>) => void
-) => MutatorObject;
+export type AimsMutatorFn<I, M> = (state: AimsState<I, M>) => M;
 
-export type AimsScaffold<StateObject, MutatorObject> = {
-  a?: (x: StateObject, y: AimsPatch<StateObject>) => StateObject;
-  i?: StateObject;
-  m?:
-    | AimsMutatorFn<StateObject, MutatorObject>
-    | AimsMutatorFn<StateObject, MutatorObject>[];
+export type AimsSafeMutatorFn<I, M> = (
+  state: AimsSafeState<I, M>,
+  patch: (update: AimsPatch<I>) => void
+) => M;
+
+export type AimsScaffold<I, M> = {
+  a?: (x: I, y: AimsPatch<I>) => I;
+  i?: I;
+  m?: (AimsMutatorFn<I, typeof M> | AimsSafeMutatorFn<I, typeof M>)[];
   s?: boolean;
 };

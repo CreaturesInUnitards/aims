@@ -1,11 +1,11 @@
-import { AimsMutatorFn } from "../../index";
+import { AimsSafeMutatorFn } from "../../index";
 
-export type IFoo = { $name: string };
+export type IFoo = { $name: string; $hooba: number };
 export type MFoo = { setName: () => void };
-export const MuFoo: AimsMutatorFn<IFoo, MFoo> = (state, patch) => ({
+export const MuFoo: AimsSafeMutatorFn<IFoo, MFoo> = (state, patch) => ({
   setName: () => {
     const { $name } = state.get();
-    patch!({ $name: $name + "." });
+    patch({ $name: $name + "." });
   },
 });
-export const Foo: IFoo = { $name: "Scotty" };
+export const Foo: IFoo = { $name: "Scotty", $hooba: 9 };

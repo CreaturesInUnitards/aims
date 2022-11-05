@@ -1,12 +1,15 @@
-import { AimsMutatorFn } from "../../index";
+import { AimsSafeMutatorFn } from "../../index";
 
 export type IBar = { $thing: string };
 export type MBar = {
   setThing: ($thing: string) => void;
+  getEverybody: () => string;
 };
-export const MuBar: AimsMutatorFn<IBar, MBar> = (_state, patch) => ({
+export const MuBar: AimsSafeMutatorFn<IBar, MBar> = (_state, patch) => ({
   setThing: ($thing) => {
-    patch!({ $thing });
+    patch({ $thing });
   },
+  getEverybody: () => "Everybody",
 });
+
 export const Bar: IBar = { $thing: "Jack" };

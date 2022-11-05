@@ -1,9 +1,9 @@
 import aims from "../../lib/aims";
-import { AimsState } from "../../index";
+import { AimsSafeState } from "../../index";
 import { Foo, IFoo, MFoo, MuFoo } from "./Foo.model";
 import { Bar, IBar, MBar, MuBar } from "./Bar.model";
 
-type STATE = AimsState<IFoo & IBar, MFoo & MBar>;
+export type STATE = AimsSafeState<IFoo & IBar, MFoo & MBar>;
 
 export const createState = () => {
   let button: HTMLElement | null;
@@ -18,12 +18,15 @@ export const createState = () => {
       if (!button) {
         button = document.getElementById("counter");
         button!.onclick = (_e) => {
+          const { $thing } = state.get();
           state.setName();
+          state.setThing($thing + ".");
         };
       }
-      button!.textContent = state.get().$name;
+      const { $name, $thing } = state.get();
+      button!.textContent = `${$name} ${$thing} ${state.getEverybody()}`;
     }
   );
 
-  state.setName();
+  return state;
 };
