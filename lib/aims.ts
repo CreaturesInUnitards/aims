@@ -8,9 +8,15 @@
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
 import merge from "./merge";
-import { AimsPatch, AimsSafeState, AimsScaffold, AimsState } from "../aims";
+import {
+  AIMS,
+  AimsPatch,
+  AimsSafeState,
+  AimsScaffold,
+  AimsState,
+} from "../aims";
 
-const aims = <I, M>(
+const aims: AIMS = <I, M>(
   {
     a = merge, // accumulator
     i, // initial_state

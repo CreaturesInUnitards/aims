@@ -26,3 +26,8 @@ export type AimsScaffold<I, M> = {
   m?: (AimsMutatorFn<I, typeof M> | AimsSafeMutatorFn<I, typeof M>)[];
   s?: boolean;
 };
+
+export type AIMS = (
+  options: AimsScaffold<I, M>,
+  render: (state: AimsState<I, M>) => void
+) => AimsState<I, M>;
