@@ -7,14 +7,8 @@
  * Forked and codemodded, waiting on pull
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
-import merge from "./merge";
-import {
-  AIMS,
-  AimsPatch,
-  AimsSafeState,
-  AimsScaffold,
-  AimsState,
-} from "../aims";
+import merge from "./merge"
+import { AimsPatch, AimsSafeState, AimsScaffold, AimsState } from "../aims"
 
 const aims = <I, M>(
   {
@@ -24,27 +18,25 @@ const aims = <I, M>(
     s = false, // safemode
   }: AimsScaffold<I, M> = {},
   render?: (state: AimsState<I, M> | AimsSafeState<I, M>) => void
-) => {
-  type STATE = AimsState<I, M> | AimsSafeState<I, M>;
-
+): AimsState<I, M> | AimsSafeState<I, M> => {
   let value = a({} as I, i || {}),
-    state: any;
+    state: any
 
   const patch = (update: AimsPatch<I>) => {
-    value = a(value, update);
-    render && render(state);
-  };
+    value = a(value, update)
+    render && render(state)
+  }
 
-  state = Object.assign({ get: () => value }, !s && { patch });
+  state = Object.assign({ get: () => value }, !s && { patch })
 
   const all_mutators = [m]
     .flat()
     // @ts-ignore
-    .map((mutatorFn) => mutatorFn(state, !!s && patch));
+    .map((mutatorFn) => mutatorFn(state, !!s && patch))
 
-  Object.assign(state, ...all_mutators);
-  render && render(state);
-  return Object.freeze(state) as STATE;
-};
+  Object.assign(state, ...all_mutators)
+  render && render(state)
+  return Object.freeze(state)
+}
 
-export default aims as AIMS<any, any>;
+export default aims
