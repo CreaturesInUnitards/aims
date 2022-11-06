@@ -3,8 +3,6 @@
  * M: M, essentially (...args?) => any
  * */
 
-type AimsOpenObject = { [prop: string]: any };
-
 export type AimsPatch<I> = Partial<I>;
 
 export type AimsSafeState<I, M> = M & { get: () => I };
@@ -27,7 +25,7 @@ export type AimsScaffold<I, M> = {
   s?: boolean;
 };
 
-export type AIMS = (
-  options: AimsScaffold<I, M>,
-  render: (state: AimsState<I, M>) => void
-) => AimsState<I, M>;
+declare function aims<I, M>(
+  options?: AimsScaffold<I, M>,
+  render?: (state: AimsState<I, M>) => void
+): AimsState<I, M> | AimsSafeState<I, M>;
