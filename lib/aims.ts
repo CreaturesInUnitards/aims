@@ -8,7 +8,13 @@
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
 import merge from "./merge";
-import { AimsPatch, AimsSafeState, AimsScaffold, AimsState } from "../aims";
+import {
+  AIMS,
+  AimsPatch,
+  AimsSafeState,
+  AimsScaffold,
+  AimsState,
+} from "../aims";
 
 const aims = <I, M>(
   {
@@ -41,4 +47,4 @@ const aims = <I, M>(
   return Object.freeze(state) as STATE;
 };
 
-export default aims;
+export default aims as AIMS<any, any>;

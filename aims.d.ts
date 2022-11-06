@@ -25,7 +25,7 @@ export type AimsScaffold<I, M> = {
   s?: boolean;
 };
 
-declare function aims<I, M>(
-  options?: AimsScaffold<I, M>,
-  render?: (state: AimsState<I, M>) => void
-): AimsState<I, M> | AimsSafeState<I, M>;
+export type AIMS<I, M> = (
+  options: AimsScaffold<I, M>,
+  render: (state: AimsState<I, M>) => void
+) => AimsState<I, M>;
