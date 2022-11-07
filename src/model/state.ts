@@ -1,4 +1,4 @@
-import { create } from "../../lib/aims"
+import aims from "../../lib/aims"
 import { SafeState } from "../../aims"
 import { Foo, IFoo, MFoo, MuFoo } from "./Foo.model"
 import { Bar, IBar, MBar, MuBar } from "./Bar.model"
@@ -8,7 +8,7 @@ export type STATE = SafeState<IFoo & IBar, MFoo & MBar>
 export const createState = () => {
   let button: HTMLElement | null
 
-  const state: STATE = create(
+  const state: STATE = aims(
     {
       i: { ...Foo, ...Bar },
       m: [MuFoo, MuBar],

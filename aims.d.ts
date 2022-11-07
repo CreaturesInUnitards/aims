@@ -28,7 +28,9 @@ export type Scaffold<I, M> = {
   s?: boolean
 }
 
-declare function create<I, M>(
+declare function aims<I, M>(
   options?: Scaffold<I, M>,
   render?: (state: State<I, M> | SafeState<I, M>) => void
 ): State<I, M> | SafeState<I, M>
+
+export default aims
