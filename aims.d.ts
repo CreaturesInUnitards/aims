@@ -3,34 +3,32 @@
  * M: M, essentially (...args?) => any
  * */
 
-export type AimsPatch<I> = Partial<I>
+export type Patch<I> = Partial<I>
 
-export type AimsSafeState<I, M> = M & { get: () => I }
+export type SafeState<I, M> = M & { get: () => I }
 
-export type AimsState<I, M> = AimsSafeState<I, M> & {
-  patch: (update: AimsPatch<I>) => void
+export type State<I, M> = SafeState<I, M> & {
+  patch: (update: Patch<I>) => void
 }
 
-export type AimsMutatorFn<I, M> = (state: AimsState<I, M>) => M
+export type MutatorFn<I, M> = (state: State<I, M>) => M
 
-export type AimsSafeMutatorFn<I, M> = (
-  state: AimsSafeState<I, M>,
-  patch: (update: AimsPatch<I>) => void
+export type SafeMutatorFn<I, M> = (
+  state: SafeState<I, M>,
+  patch: (update: Patch<I>) => void
 ) => M
 
-export type AimsScaffold<I, M> = {
-  a?: (x: I, y: AimsPatch<I>) => I
+export type Scaffold<I, M> = {
+  a?: (x: I, y: Patch<I>) => I
   i?: I
   m?:
-    | AimsMutatorFn<I, typeof M>
-    | AimsSafeMutatorFn<I, typeof M>
-    | (AimsMutatorFn<I, typeof M> | AimsSafeMutatorFn<I, typeof M>)[]
+    | MutatorFn<I, typeof M>
+    | SafeMutatorFn<I, typeof M>
+    | (MutatorFn<I, typeof M> | SafeMutatorFn<I, typeof M>)[]
   s?: boolean
 }
 
-export type AIMS<I, M> = {
-  (
-    options?: AimsScaffold<I, M>,
-    render?: (state: AimsState<I, M>) => void
-  ): AimsState<I, M>
-}
+declare function create<I, M>(
+  options?: Scaffold<I, M>,
+  render?: (state: State<I, M> | SafeState<I, M>) => void
+): State<I, M> | SafeState<I, M>

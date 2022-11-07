@@ -7,22 +7,22 @@
  * Forked and codemodded, waiting on pull
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
-import merge from "./merge"
-import { AimsPatch, AimsSafeState, AimsScaffold, AimsState } from "../aims"
+import _merge from "./merge"
+import * as aims from "../aims"
 
-const aims = <I, M>(
+export const create = <I, M>(
   {
-    a = merge, // accumulator
+    a = _merge, // accumulator
     i, // initial_state
     m = [], // mutators
     s = false, // safemode
-  }: AimsScaffold<I, M> = {},
-  render?: (state: AimsState<I, M> | AimsSafeState<I, M>) => void
-): AimsState<I, M> | AimsSafeState<I, M> => {
+  }: aims.Scaffold<I, M> = {},
+  render?: (state: aims.State<I, M> | aims.SafeState<I, M>) => void
+): aims.State<I, M> | aims.SafeState<I, M> => {
   let value = a({} as I, i || {}),
     state: any
 
-  const patch = (update: AimsPatch<I>) => {
+  const patch = (update: aims.Patch<I>) => {
     value = a(value, update)
     render && render(state)
   }
@@ -39,4 +39,4 @@ const aims = <I, M>(
   return Object.freeze(state)
 }
 
-export default aims
+export const merge = _merge

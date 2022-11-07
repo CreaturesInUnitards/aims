@@ -51,9 +51,10 @@ instead is passed as the second argument to `m`._
 Begin here:
 
 ```js
-import aims from 'aims-js'
-const state = aims()
+import * as aims from 'aims-js' 
+const state = aims.create()
 ```
+_The wildcard import will also give you access to all the types via e.g. `aims.State`, etc._ 
 
 Now `state` is ready to use. Give it some properties:
 
@@ -76,7 +77,7 @@ Any function with the signature `(previous_state, incoming_patch) => ({})` (e.g.
 
 ```js
 // low-rent, shallow immutability
-const state = aims({ 
+const state = aims.create({ 
   a: (prev, incoming) => Object.assign({}, prev, incoming) 
 })
 ```
@@ -90,7 +91,7 @@ const i = {
     height: 'Average'
 }
 
-const state = aims({ i })
+const state = aims.create({ i })
 const { name, height } = state.get()
 console.log(name, height) // Mike Average
 ```
@@ -121,7 +122,7 @@ const m = state => ({
     
 })
 
-const state = aims({ m: mutators })
+const state = aims.create({ m: mutators })
 
 /* ...somwhere in your code... */
 
@@ -135,7 +136,7 @@ be made via `state.myMethod(...)`.
 You may have multiple, discrete sets of mutators, e.g.
 `SocketMutators` and `RESTMutators`.  
 ```js
-const state = aims({ m: [SocketMutators, RESTMutators] })
+const state = aims.create({ m: [SocketMutators, RESTMutators] })
 ```
 In this case, it may be advisable to set namespaces, since `aims` is
 determinedly tiny and won't detect collisions for you.
@@ -153,7 +154,7 @@ const RESTMutators = state => ({
     REST: {...}
 })
 
-const state = aims({m: [SocketMutators, RESTMutators]})
+const state = aims.create({m: [SocketMutators, RESTMutators]})
 
 // destructure state — NOT state.get() 
 const { Socket } = state
@@ -169,13 +170,13 @@ views and elsewhere. Safemode achieves this by omitting `state.patch` and
 instead passing the patching function as a second parameter to Mutators, e.g.
 
 ```js
-const state = aims({
-  s: true,
+const state = aims.create({
   m: (state, patch) => ({
     setFoo: foo => {
       patch({ foo })
     }
   })
+  s: true,
 })
 ```
 
@@ -189,7 +190,7 @@ respond accordingly, all in one place. A [Mithril](https://mithril.js.org)
 implementation might look like this: 
 
 ```js
-import aims, { merge } from 'aims-js'
+import { merge, create } from 'aims-js'
 const a = (prev, incoming) => {
     // update the route on filter changes  
     if (incoming.filter) m.route.set('/' + incoming.filter)
@@ -201,7 +202,7 @@ const a = (prev, incoming) => {
     return new_state
 }
 
-const state = aims({ a })
+const state = create({ a })
 ```
 
 ## Integrating with view libraries*
@@ -212,7 +213,6 @@ in turn takes `state` as its own argument, and render your App within the
 function. So for e.g. React:
 
 ```jsx
-import aims from 'aims-js'
 import { createRoot } from 'ReactDOM'
 
 const root = createRoot(document.getElementById('app'))
@@ -220,7 +220,7 @@ const root = createRoot(document.getElementById('app'))
 // Here the reference returned from `aims` is 
 // unneeded, since we pass `state` to the function 
 // provided, so we can just call `aims` directly
-aims({}, state => {
+aims.create({}, state => {
   root.render(<App state={state} />)
 })
 ```

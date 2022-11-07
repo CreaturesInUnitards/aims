@@ -1,14 +1,14 @@
-import aims from "../../lib/aims";
-import { AimsSafeState } from "../../aims";
-import { Foo, IFoo, MFoo, MuFoo } from "./Foo.model";
-import { Bar, IBar, MBar, MuBar } from "./Bar.model";
+import { create } from "../../lib/aims"
+import { SafeState } from "../../aims"
+import { Foo, IFoo, MFoo, MuFoo } from "./Foo.model"
+import { Bar, IBar, MBar, MuBar } from "./Bar.model"
 
-export type STATE = AimsSafeState<IFoo & IBar, MFoo & MBar>;
+export type STATE = SafeState<IFoo & IBar, MFoo & MBar>
 
 export const createState = () => {
-  let button: HTMLElement | null;
+  let button: HTMLElement | null
 
-  const state: STATE = aims(
+  const state: STATE = create(
     {
       i: { ...Foo, ...Bar },
       m: [MuFoo, MuBar],
@@ -16,17 +16,17 @@ export const createState = () => {
     },
     (state: STATE) => {
       if (!button) {
-        button = document.getElementById("counter");
+        button = document.getElementById("counter")
         button!.onclick = (_e) => {
-          const { $thing } = state.get();
-          state.setName();
-          state.setThing($thing + ".");
-        };
+          const { $thing } = state.get()
+          state.setName()
+          state.setThing($thing + ".")
+        }
       }
-      const { $name, $thing } = state.get();
-      button!.textContent = `${$name} ${$thing} ${state.getEverybody()}`;
+      const { $name, $thing } = state.get()
+      button!.textContent = `${$name} ${$thing} ${state.getEverybody()}`
     }
-  );
+  )
 
-  return state;
-};
+  return state
+}
