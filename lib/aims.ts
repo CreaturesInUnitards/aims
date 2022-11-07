@@ -7,12 +7,12 @@
  * Forked and codemodded, waiting on pull
  * https://github.com/fuzetsu/mergerino/pull/14
  * */
-import _merge from "./merge"
+import merge from "./merge"
 import * as aims from "../aims"
 
 export const create = <I, M>(
   {
-    a = _merge, // accumulator
+    a = merge, // accumulator
     i, // initial_state
     m = [], // mutators
     s = false, // safemode
@@ -38,5 +38,3 @@ export const create = <I, M>(
   render && render(state)
   return Object.freeze(state)
 }
-
-export const merge = _merge
