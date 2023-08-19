@@ -8,14 +8,14 @@ export type Patch<I> = Partial<I>
 export type SafeState<I, M> = M & { get: () => I }
 
 export type State<I, M> = SafeState<I, M> & {
-  patch: (update: Patch<I>) => void
+  patch: (...args: unknown) => void
 }
 
 export type MutatorFn<I, M> = (state: State<I, M>) => M
 
 export type SafeMutatorFn<I, M> = (
   state: SafeState<I, M>,
-  patch: (update: Patch<I>) => void
+  update: (...args: unknown) => void
 ) => M
 
 export type Scaffold<I, M> = {
